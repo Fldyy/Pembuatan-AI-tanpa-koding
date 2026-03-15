@@ -1,0 +1,159 @@
+{
+  "name": "Chatbot Sheet",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah Asisten Informasi Kursus NFA. Tugasmu adalah menjawab pertanyaan calon peserta mengenai jenis program (Bootcamp/Skill Up), deskripsi pelatihan, dan harga. Kamu memiliki akses ke data kursus melalui tool Google Sheets. Jika pengguna bertanya tentang harga atau detail kursus, gunakan tool tersebut untuk mencari data yang akurat. Jawablah dengan ramah dan informatif."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        0,
+        -96
+      ],
+      "id": "ca5e69fc-deb0-43c2-9caa-d41e54b6bc86",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        80
+      ],
+      "id": "20beb6f4-c0ee-488d-9957-9e53e5a17b79",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "sShJzkeaLEcKcmZy",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        80
+      ],
+      "id": "1d9af987-d86e-4e92-ac04-a5f8fdcdadc6",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1V2Y_5TWv-BjPR5V30UhIcrg1hbZfckmsmsLMIGSCix8",
+          "mode": "list",
+          "cachedResultName": "n8n 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1V2Y_5TWv-BjPR5V30UhIcrg1hbZfckmsmsLMIGSCix8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1V2Y_5TWv-BjPR5V30UhIcrg1hbZfckmsmsLMIGSCix8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        80
+      ],
+      "id": "7724f140-d7dc-4225-a7e4-abb6914021b1",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "D9dS16tXsl1qG3MQ",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! Saya adalah Asisten Kursus NFA. Anda bisa bertanya hal-hal seperti: 'Berapa harga Bootcamp Digital Marketing?' atau 'Apa saja yang dipelajari di kursus Python?'. Apa yang bisa saya bantu sekarang?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -160,
+        -96
+      ],
+      "id": "88896fbb-8cd8-482f-a797-bcda4ce83f2a",
+      "name": "When chat message received",
+      "webhookId": "ebdb640d-d28c-48ea-932b-7c69a1208d99"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "16002c23-99ff-4fbb-916c-77f716dd738a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fd1fa1e3ba1e19fa4dd8d73c8a479b27de067829cf05af4ebeb845628196e8c8"
+  },
+  "id": "J5STV8mNBsfGgsJq",
+  "tags": []
+}
