@@ -1,0 +1,158 @@
+{
+  "name": "Chatbot Web Google Sheets",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Bertindaklah sebagai Asisten Virtual Informasi Kursus NFA. Anda bertanggung jawab untuk memfasilitasi kebutuhan informasi calon peserta terkait program Bootcamp dan Skill Up.\n\nDalam menjalankan tugas, Anda memiliki akses langsung ke database melalui tool Google Sheets. Untuk menjamin akurasi data, pastikan Anda melakukan penarikan data terkini setiap kali pengguna menanyakan rincian biaya atau spesifikasi program. Sampaikan informasi dengan nada bicara yang informatif, ramah, dan solutif guna membangun kepercayaan calon peserta terhadap layanan NFA."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        32,
+        -48
+      ],
+      "id": "97a8b77f-6885-49ac-82ed-edcfa10dc8b8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        112
+      ],
+      "id": "d0435b4a-f911-4ce2-89a7-e3aaf76a56c5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "sShJzkeaLEcKcmZy",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        112,
+        112
+      ],
+      "id": "be5d4059-ceff-4f24-819c-88dc8dc8d053",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1V2Y_5TWv-BjPR5V30UhIcrg1hbZfckmsmsLMIGSCix8",
+          "mode": "list",
+          "cachedResultName": "n8n 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1V2Y_5TWv-BjPR5V30UhIcrg1hbZfckmsmsLMIGSCix8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1V2Y_5TWv-BjPR5V30UhIcrg1hbZfckmsmsLMIGSCix8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        256,
+        112
+      ],
+      "id": "690e3251-f693-4d44-bd3d-40b02038f43e",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "D9dS16tXsl1qG3MQ",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! Saya adalah Asisten Kursus NFA. Anda bisa bertanya hal-hal seperti: 'Berapa harga Bootcamp Digital Marketing?' atau 'Apa saja yang dipelajari di kursus Python?'. Apa yang bisa saya bantu sekarang?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -144,
+        -48
+      ],
+      "id": "473ce0f9-9a88-44b1-b7ef-a4d5d2f1ce27",
+      "name": "When chat message received",
+      "webhookId": "89858c33-25ef-4cc0-b3a1-866491ffa7b5"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0619ec89-53b4-4e0d-9211-375f27e4928d",
+  "meta": {
+    "instanceId": "fd1fa1e3ba1e19fa4dd8d73c8a479b27de067829cf05af4ebeb845628196e8c8"
+  },
+  "id": "PxkE5mXR9tV1YceB",
+  "tags": []
+}
